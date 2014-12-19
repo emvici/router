@@ -1,0 +1,28 @@
+# We might need to edit ecosystem because of the lack of api options on pm2 deploy
+config/ecosystem.edited.json
+
+# Node Modules #
+######################
+node_modules/
+
+
+# Sublime text #
+######################
+*.sublime-workspace
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+
+## Specific files
+npm-debug.log
+
+.config

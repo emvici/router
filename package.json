@@ -1,0 +1,35 @@
+{
+  "name": "emvici-router",
+  "version": "0.0.1",
+  "description": "express/connect pluggable router middleware",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emvici/emvici-router.git"
+  },
+  "keywords": [
+    "connect",
+    "express",
+    "router",
+    "promise",
+    "bluebird",
+    "wizard",
+    "simple",
+    "routes",
+    "route",
+    "paths",
+    "uri",
+    "findhit",
+    "emvici",
+    "middleware"
+  ],
+  "author": "José Moreira <jose.moreira@findhit.com>",
+  "license": "GPL v3",
+  "bugs": {
+    "url": "https://github.com/emvici/emvici-router/issues"
+  },
+  "homepage": "https://github.com/emvici/emvici-router"
+}
