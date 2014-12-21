@@ -73,29 +73,32 @@ matches a request.
 * Required
 * Allowed Inputs:
 * Examples:
-    * ```js
-    [
-        function ( req, res ) {
 
-            return Promise.cast( req )
-                .then( doSomethingAsync );
+```js
 
-        },
+```
 
-        function ( req, res, next ) {
+```js
+[
+    function ( req, res ) {
 
-            doSomethingAsync( req, function ( err ) {
-                if ( err ) return next( err );
+        return Promise.cast( req )
+            .then( doSomethingAsync );
+    },
 
-                // some logic
+    function ( req, res, next ) {
 
-                next();
-            });
+        doSomethingAsync( req, function ( err ) {
+            if ( err ) return next( err );
 
-        }
-    ]
+            // some logic
 
-      ```
+            next();
+        });
+
+    }
+]
+```
 
 ###### type
 
@@ -125,7 +128,6 @@ matches a request.
 
 * Default Value: false, // Defauts to Controller name +'/'+ action +'.html'
 * Allowed Inputs:
-
 
 
 
