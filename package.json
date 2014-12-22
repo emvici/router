@@ -38,7 +38,9 @@
   },
   "devDependencies": {
     "chai": "^1.10.0",
+    "connect": "^3.3.3",
     "mocha": "^2.0.1",
-    "sinon": "^1.12.2"
+    "sinon": "^1.12.2",
+    "supertest": "^0.15.0"
   }
 }
