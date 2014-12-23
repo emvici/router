@@ -16,17 +16,27 @@ describe( "connect", function () {
         app = connect();
         router = constructor();
 
+        // Simulate a session middleware
+        app.use(function ( req, res, next ) {
+            req.session = {};
+            next();
+        });
+
+        // Use router
         app.use( router );
+
     });
 
     describe( "routes", function () {
 
-        it( "basic get route", function ( done ) {
+        it( "basic addRoute", function ( done ) {
 
-            router.route({
-                url: [ '/' ],
+            router.addRoute({
+                url: '/',
                 stack: function ( req, res, next ) {
-                    res.status( 200 ).send( "OK" ).end();
+                    res.statusCode = 300;
+                    res.write( "OK" );
+                    res.end();
                 },
             });
 
