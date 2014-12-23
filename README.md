@@ -43,11 +43,7 @@ app.use( route );
 
 var router = require( 'emvici-router' )();
 
-router.route({
-
-    /* options */
-
-})
+router.addRoute({ /* options */ })
 
 ```
 
@@ -58,7 +54,7 @@ router.route({
 This will determine, by filtering url, which requests this route will run.
 
 * Required
-* Allowed Inputs: `String`; `Regexp` ; `Array` of previous allowed inputs
+* Allowed Inputs: `String`; `Regexp`; `Array` of `Strings` ; `Array` of previous allowed inputs
 * Examples:
     * `'/'`
     * `'/test/lol'`

@@ -29,22 +29,69 @@ describe( "connect", function () {
 
     describe( "routes", function () {
 
-        it( "basic addRoute", function ( done ) {
+        describe( "addRoute", function () {
 
-            router.addRoute({
-                url: '/',
-                stack: function ( req, res, next ) {
-                    res.statusCode = 300;
-                    res.write( "OK" );
-                    res.end();
-                },
+            describe( "stack", function () {
+
+                it( "stack as function", function ( done ) {
+
+                    router.addRoute({
+                        url: '/',
+                        stack: function ( req, res, next ) {
+                            res.statusCode = 200;
+                            res.write( req.url );
+                            res.end();
+                        },
+                    });
+
+                    request( app )
+                        .get( '/' )
+                        .expect( 200, '/', done );
+
+                });
+
+                it( "stack as an array of functions", function ( done ) {
+
+                    router.addRoute({
+                        url: '/',
+                        stack: [
+                            function ( req, res, next ) {
+                                res.statusCode = 200;
+
+                                next();
+                            },
+                            function ( req, res, next ) {
+                                res.write( '-' );
+
+                                next();
+                            },
+                            function ( req, res, next ) {
+                                res.write( '.' );
+
+                                next();
+                            },
+                            function ( req, res, next ) {
+                                res.write( '-' );
+
+                                res.end();
+                            },
+                        ]
+                    });
+
+                    request( app )
+                        .get( '/' )
+                        .expect( 200, '-.-', done );
+
+                });
+
             });
 
-            request( app )
-                .get( '/' )
-                .expect( 200, '/', done );
+            describe( "wizard", function () {
+
+            });
 
         });
+
 
     });
 
