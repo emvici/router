@@ -41,8 +41,6 @@ var testreport = function ( target, ctx ) {
         describe( target, function () {
             var ctx = mainCtx[ target ] = {};
 
-            testReqs.call( ctx, target, 5 );
-            testReqs.call( ctx, target, 50 );
             testReqs.call( ctx, target, 150 );
             testReqs.call( ctx, target, 250 );
 

@@ -35,7 +35,8 @@
   "dependencies": {
     "bluebird": "^2.4.2",
     "debug": "^2.1.0",
-    "findhit-util": "^0.2.3"
+    "findhit-util": "^0.2.3",
+    "stack-queue": "0.0.1"
   },
   "devDependencies": {
     "chai": "^1.10.0",
