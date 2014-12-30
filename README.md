@@ -49,6 +49,11 @@ router.addRoute({ /* options */ })
 
 #### Options
 
+###### type
+
+* Defaults to: 'stack'
+* Allowed Inputs: 'stack', 'wizard'
+
 ###### url
 
 This will determine, by filtering url, which requests this route will run.
@@ -61,18 +66,11 @@ This will determine, by filtering url, which requests this route will run.
     * `/^\/users\/(test|testa)/$`
     * `[ '/test', '/test/index' ]`
 
-###### steps
+###### stack
 
-This should be a function or an array of functions that will run when this route
-matches a request.
-
-* Required
-* Allowed Inputs:
+* Required when type is equal to `stack`
+* Allowed Inputs: `Function`; `Array` of previous allowed inputs
 * Examples:
-
-```js
-
-```
 
 ```js
 [
@@ -96,38 +94,6 @@ matches a request.
 ]
 ```
 
-###### type
-
-* Default Value: 'simple', // Defaults to simple or wizard // if action is ( Array [] or String "" ) or ( Object {} )
-* Allowed Inputs:
-
-
-
-
-###### verb
-
-* Default Value: 'POST', // Defaults always to All, can be: POST, GET, ALL // This prefix will be used on all action functions callers
-* Allowed Inputs:
-
-
-
-
-###### prefix
-
-* Default Value: false, // Defaults to empty string
-* Allowed Inputs:
-
-
-
-
-###### view
-
-* Default Value: false, // Defauts to Controller name +'/'+ action +'.html'
-* Allowed Inputs:
-
-
-
-
 ### Structure convention
 
 We recomend you to place a file called `./router.js` so you can save current app
@@ -135,37 +101,53 @@ router and allow Controllers or other modules on your system to load it up and
 use it accordely:
 
 ```js
+// app.js
+var connect = require( 'connect' );
+
+var app = connect(),
+    router = require( './router' );
+
+app.use( router );
+```
+
+
+```js
 // router.js
-module.exports = require( 'emvici-router' )();
+var router = module.exports = require( 'emvici-router' )({
+  /* options */
+  throw404: false
+});
+
+router.addRoutes( require( './controller/users' ) );
 ```
 
 ```js
-// controller/users/index.js
+// controller/users.js
 
-var router = require( '../../router' );
+var someSemiNeededMiddleware = function () {
+  // ...
+};
 
-
-// Your route configurations
-
-router.routes([
+module.exports = [
 
     {
         url: [ '/users', '/users/index', '/users/list' ]
         method: 'get',
-        action: function ( req, res ) {
-            // ...
-        },
+        stack: [
+          someSemiNeededMiddleware,
+          function ( req, res ) {
+              // ...
+          }
+        ],
     },
 
     {
         url: [ '/users/add', '/users/create', '/users/register' ]
         method: 'post',
-        action: function ( req, res ) {
+        stack: function ( req, res ) {
             // ...
         },
-    },
+    }
 
-]);
-
-
+];
 ```
