@@ -25,7 +25,7 @@ var testreport = function ( target, ctx ) {
     testReqs = function ( target, requests ) {
         var self = this;
 
-        it( requests +' reqs', function () {
+        it.skip( requests +' reqs', function () {
             return Promise.all([
                 targets[ target ]( requests ),
                 targets[ target ]( requests ),

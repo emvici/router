@@ -1,47 +1,68 @@
 var Util = require( 'findhit-util' ),
     Promise = require( 'bluebird' ),
 
-    Route = require( '../lib/route' ),
+    Route = require( '../../lib/route' ),
 
     sinon = require( 'sinon' ),
     chai = require( 'chai' ),
     expect = chai.expect;
 
-var stackFn = function ( req, res, next ) {
-    res.write( req.step.name );
-    next();
-};
-
-describe( "Route type - Wizard", function () {
+describe( "Route -> Wizard", function () {
     var route;
 
     before(function () {
         route = Route.construct({
+            url: '/wizard/breakfast',
+            type: 'wizard',
             steps: {
-                first: {
-                    stack: stackFn,
+                want: { // step
+                    stack: sinon.spy(),
                 },
-                second: {
-                    stack: stackFn,
+                second: { // step
+                    stack: sinon.spy(),
                 },
-                conditional: {
-                    third: {
-                        stack: stackFn,
+                conditional: { // branch
+
+                    anotherconditional: { // branch
+
+                        third: { // step
+                            stack: sinon.spy(),
+                        },
+
                     },
-                    fourth: {
-                        stack: stackFn,
+
+                    fourth: { // step
+                        stack: sinon.spy(),
                     },
-                }
-                fifth: {
-                    stack: stackFn,
+                },
+                fifth: { // step
+                    stack: sinon.spy(),
                 }
             },
         });
     });
 
-    it( "Dispatch a first request and check if first step was received", function () {
+    it( "should have 5 steps", function () {
+        expect( route.steps ).to.have.length( 5 );
+    });
 
+    it( "should have 2 branches", function () {
+        expect( route.branches ).to.have.length( 2 );
+    });
 
+    describe( "match", function () {
+
+        it( "should match /wizard/breakfast", function () {
+            expect( route.match( '/wizard/breakfast', 'GET' ) ).to.be.ok;
+        });
+
+        it( "should match /wizard/breakfast/want", function () {
+            expect( route.match( '/wizard/breakfast/want', 'GET' ) ).to.be.ok;
+        });
+
+        it( "should NOT match /wizard/breakfast/want", function () {
+            expect( route.match( '/wizard/breakfast/wanta', 'GET' ) ).to.not.be.ok;
+        });
 
     });
 

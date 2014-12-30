@@ -33,10 +33,10 @@
   },
   "homepage": "https://github.com/emvici/emvici-router",
   "dependencies": {
-    "bluebird": "^2.4.2",
-    "debug": "^2.1.0",
+    "bluebird": "^2.5.2",
+    "debug": "^2.1.1",
     "findhit-util": "^0.2.3",
-    "stack-queue": "0.0.1"
+    "stack-queue": "0.0.3"
   },
   "devDependencies": {
     "chai": "^1.10.0",
