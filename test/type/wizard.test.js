@@ -7,62 +7,69 @@ var Util = require( 'findhit-util' ),
     chai = require( 'chai' ),
     expect = chai.expect;
 
-describe( "Route -> Wizard", function () {
+describe( "WizardRoute", function () {
     var route;
 
     before(function () {
         route = Route.construct({
-            url: '/wizard/breakfast',
+            url: '/buy/breakfast',
             type: 'wizard',
             steps: {
-                want: { // step
+                menu: { // step
                     stack: sinon.spy(),
                 },
-                second: { // step
+                drink: { // step
                     stack: sinon.spy(),
                 },
-                conditional: { // branch
+                snacks: { // branch
 
-                    anotherconditional: { // branch
+                    chicken: { // branch
 
-                        third: { // step
+                        wings: { // step
+                            stack: sinon.spy(),
+                        },
+
+                        peitinho: { // step
                             stack: sinon.spy(),
                         },
 
                     },
 
-                    fourth: { // step
+                    fromage: { // step
                         stack: sinon.spy(),
                     },
                 },
-                fifth: { // step
+                delivery: { // step
                     stack: sinon.spy(),
                 }
             },
         });
     });
 
-    it( "should have 5 steps", function () {
-        expect( route.steps ).to.have.length( 5 );
+    it( "should have 6 steps", function () {
+        expect( route.steps ).to.have.length( 6 );
     });
 
     it( "should have 2 branches", function () {
         expect( route.branches ).to.have.length( 2 );
     });
 
-    describe( "match", function () {
+    describe( ".match", function () {
+        var shouldBe = function ( match, url ) {
+            it( "should" + ( match ? " NOT " : " " ) + "work with " + url, function () {
+                var ex = expect( route.match( url, 'GET' ) );
+                if ( match ) ex.to.be.ok; else ex.to.not.be.ok;
+            });
+        };
 
-        it( "should match /wizard/breakfast", function () {
-            expect( route.match( '/wizard/breakfast', 'GET' ) ).to.be.ok;
-        });
-
-        it( "should match /wizard/breakfast/want", function () {
-            expect( route.match( '/wizard/breakfast/want', 'GET' ) ).to.be.ok;
-        });
-
-        it( "should NOT match /wizard/breakfast/want", function () {
-            expect( route.match( '/wizard/breakfast/wanta', 'GET' ) ).to.not.be.ok;
-        });
+        shouldBe( 1, '/buy/breakfast' );
+        shouldBe( 1, '/buy/breakfast/menu' );
+        shouldBe( 0, '/buy/breakfast/snacks' );
+        shouldBe( 0, '/buy/breakfast/snacks/chicken' );
+        shouldBe( 1, '/buy/breakfast/snacks/chicken/wings' );
+        shouldBe( 1, '/buy/breakfast/snacks/fromage' );
+        shouldBe( 0, '/buy/breakfast/free' );
+        shouldBe( 0, '/buy/breakfast/something' );
 
     });
 

@@ -110,7 +110,6 @@ var app = connect(),
 app.use( router );
 ```
 
-
 ```js
 // router.js
 var router = module.exports = require( 'emvici-router' )({

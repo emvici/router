@@ -7,7 +7,7 @@ var Util = require( 'findhit-util' ),
     chai = require( 'chai' ),
     expect = chai.expect;
 
-describe( "Route -> Stack", function () {
+describe( "StackRoute", function () {
 
     var route;
 
