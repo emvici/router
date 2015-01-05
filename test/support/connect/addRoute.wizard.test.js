@@ -1,30 +1,29 @@
 var Util = require( 'findhit-util' ),
 
-Route = require( '../../../lib/route' ),
+    Route = require( '../../../lib/route' ),
 
-request = require( 'supertest' ),
-sinon = require( 'sinon' ),
-chai = require( 'chai' ),
-expect = chai.expect,
+    request = require( 'supertest' ),
+    sinon = require( 'sinon' ),
+    chai = require( 'chai' ),
+    expect = chai.expect,
 
-helper = require( './_' );
+    helper = require( './_' );
 
+// -----------------------------------------------------------------------------
 
 describe( "support connect", function () {
     var app, router;
-
-    beforeEach(function () {
-        var _ = helper();
-
-        app = _.app;
-        router = _.router;
-    });
 
     describe( "router.addRoute", function () {
 
         describe( "type: wizard", function () {
 
             before(function () {
+                var _ = helper();
+
+                app = _.app;
+                router = _.router;
+
                 router.addRoute({
                     url: '/register',
                     type: 'wizard',
@@ -33,68 +32,59 @@ describe( "support connect", function () {
                         tos: {
                             title: "Terms and Conditions",
 
-                            stack: function () {
+                            prepare: function () {
 
-                            },
-
-                            post: function ( req, res ) {
-                                return true;
                             },
                         },
 
                         identity: {
                             title: "Who are you?",
 
-                            stack: function () {
+                            prepare: function () {
 
-                            },
-
-                            post: function ( req, res ) {
-                                return true;
                             },
                         },
 
                         internationalization: {
                             title: "Internationalization",
 
-                            stack: function () {
+                            prepare: function () {
 
-                            },
-
-                            post: function ( req, res ) {
-                                return true;
                             },
                         },
 
                         credentials: {
                             title: "Credentials",
 
-                            stack: function () {
+                            prepare: function () {
 
-                            },
-
-                            post: function ( req, res ) {
-                                return true;
                             },
                         },
 
                         congratulations: {
                             title: "Congrats!!!1",
 
-                            stack: function () {
-
-                            },
-
-                            post: function () {
+                            prepare: function () {
 
                             },
                         },
 
                     },
                 });
+
             });
 
+            it( "should redirect if a non-empty step was hited", function () {
 
+            });
+
+            it( "should access first step", function () {
+
+            });
+
+            it( "should access second step if first one was hited!", function () {
+
+            });
 
         });
 

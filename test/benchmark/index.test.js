@@ -7,6 +7,12 @@ var Promise = require( 'bluebird' ),
 
 //------------------------------------------------------------------------------
 
+// Use: `DISCARD=benchmark,... npm test` to bypass benchmarks
+
+if( ( process.env.DISCARD || '' ).indexOf( 'benchmark' ) > -1 ) {
+    return;
+}
+
 var targets = {
         emvici: require( './emvici-router' ),
         express: require( './express' ),
@@ -25,7 +31,7 @@ var testreport = function ( target, ctx ) {
     testReqs = function ( target, requests ) {
         var self = this;
 
-        it.skip( requests +' reqs', function () {
+        it( requests +' reqs', function () {
             return Promise.all([
                 targets[ target ]( requests ),
                 targets[ target ]( requests ),

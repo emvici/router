@@ -14,35 +14,50 @@ describe( "WizardRoute", function () {
         route = Route.construct({
             url: '/buy/breakfast',
             type: 'wizard',
-            steps: {
-                menu: { // step
-                    stack: sinon.spy(),
+            steps: [
+                { // step
+                    name: 'menu',
+                    prepare: sinon.spy(),
                 },
-                drink: { // step
-                    stack: sinon.spy(),
+                { // step
+                    name: 'drink',
+                    prepare: sinon.spy(),
                 },
-                snacks: { // branch
 
-                    chicken: { // branch
+                { // branch
+                    name: 'snacks',
+                    steps: [
 
-                        wings: { // step
-                            stack: sinon.spy(),
+                        { // branch
+                            name: 'chicken',
+                            steps: [
+
+                                { // step
+                                    name: 'wings',
+                                    prepare: sinon.spy(),
+                                },
+
+                                { // step
+                                    name: 'peitinho',
+                                    prepare: sinon.spy(),
+                                },
+
+                            ],
+
                         },
 
-                        peitinho: { // step
-                            stack: sinon.spy(),
+                        { // step
+                            name: 'fromage',
+                            prepare: sinon.spy(),
                         },
 
-                    },
-
-                    fromage: { // step
-                        stack: sinon.spy(),
-                    },
+                    ],
                 },
-                delivery: { // step
-                    stack: sinon.spy(),
+                { // step
+                    name: 'delivery',
+                    prepare: sinon.spy(),
                 }
-            },
+            ],
         });
     });
 
@@ -70,7 +85,6 @@ describe( "WizardRoute", function () {
         shouldBe( 1, '/buy/breakfast/snacks/fromage' );
         shouldBe( 0, '/buy/breakfast/free' );
         shouldBe( 0, '/buy/breakfast/something' );
-
     });
 
 });
