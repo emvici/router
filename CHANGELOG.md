@@ -1,7 +1,10 @@
-## Upcoming
+## Roadmap
 - Examples:
     - User register wizard-based
     - Replacement of express-router by emvici-router on an express app
+
+## Upcoming
+- Fixed bug into `router.addRoutes` because of a mispelling variable reference
 
 ## 0.0.2
 - Add stacks per param, similar to `.param` API provided by [express](https://github.com/visionmedia/express)
