@@ -7,9 +7,9 @@ var Promise = require( 'bluebird' ),
 
 //------------------------------------------------------------------------------
 
-// Use: `DISCARD=benchmark,... npm test` to bypass benchmarks
+// Use: `BYPASS=benchmark,... npm test` to bypass benchmarks
 
-if( ( process.env.DISCARD || '' ).indexOf( 'benchmark' ) > -1 ) {
+if( ( process.env.BYPASS || '' ).indexOf( 'benchmark' ) > -1 ) {
     return;
 }
 

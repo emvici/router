@@ -33,8 +33,8 @@ describe( "support connect", function () {
                 });
 
                 request( app )
-                [ methodName ]( '/' )
-                .expect( 200, method, done );
+                    [ methodName ]( '/' )
+                    .expect( 200, method, done );
             });
 
             it( "shouldn't work with different method", function ( done ) {
@@ -48,8 +48,8 @@ describe( "support connect", function () {
                 });
 
                 request( app )
-                [ reqMethodName ]( '/' )
-                .expect( 404, 'NotFoundError', done );
+                    [ reqMethodName ]( '/' )
+                    .expect( 404, 'NotFoundError: No route was matched', done );
             });
 
         });

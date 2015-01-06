@@ -18,8 +18,8 @@ module.exports = function ( options ) {
 
     // Error handler
     _.app.use(function ( err, req, res, next ) {
-        res.statusCode = err.code;
-        res.write( err.name );
+        res.statusCode = err.code || 500;
+        res.write( err.toString() || 'Internal Error' );
         res.end();
     });
 
