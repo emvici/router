@@ -4,8 +4,9 @@
     - Replacement of express-router by emvici-router on an express app
 - Share generated route as context for stacks
 
-
 ## Upcoming
+
+## 0.0.3
 - Fixed bug into `router.addRoutes` because of a mispelling variable reference
 - Set `emvici_router` name to middleware function for debug proposes
 - `Router.dispatch[next]` should only try to find another route if a string
