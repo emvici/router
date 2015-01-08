@@ -8,7 +8,8 @@
 ## Upcoming
 - Fixed bug into `router.addRoutes` because of a mispelling variable reference
 - Set `emvici_router` name to middleware function for debug proposes
-
+- `Router.dispatch[next]` should only try to find another route if a string
+'route' is specified!
 
 ## 0.0.2
 - Add stacks per param, similar to `.param` API provided by [express](https://github.com/visionmedia/express)
