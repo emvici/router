@@ -1,7 +1,13 @@
 emvici-router
 =============
 
-express/connect pluggable router middleware
+High Performance express/connect pluggable router middleware
+
+This Router should perform better than [express.Router]
+(https://github.com/strongloop/express).
+
+![captura de ecra 2015-01-8 as 15 13 47](https://cloud.githubusercontent.com/assets/3604053/5664543/f96dc382-9748-11e4-8458-9c860f5e2fe7.png)
+
 
 ## Installation
 
