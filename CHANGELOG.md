@@ -6,6 +6,10 @@
 
 ## Upcoming
 
+## 0.0.4
+- `next()` should always exit router on stack end, unless we specify 'route'.
+    Example: `next( 'route' )`
+
 ## 0.0.3
 - Fixed bug into `router.addRoutes` because of a mispelling variable reference
 - Set `emvici_router` name to middleware function for debug proposes

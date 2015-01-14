@@ -30,6 +30,8 @@ describe( "support connect", function () {
                     res.statusCode = 200;
                     res.write( req.url );
                     res.end();
+
+                    next();
                 },
             });
 
@@ -70,6 +72,50 @@ describe( "support connect", function () {
             request( app )
                 .get( '/' )
                 .expect( 200, '-.-', done );
+
+        });
+
+        it( "shouldn't pass to another route unless we specify", function ( done ) {
+
+            router.get( '/', function ( req, res, next ) {
+                res.write('hey');
+                next();
+            });
+
+            router.get( '/', function ( req, res, next ) {
+                res.write("shouldn't run");
+                next();
+            });
+
+            app.use(function ( req, res ) {
+                res.end();
+            })
+
+            request( app )
+                .get( '/' )
+                .expect( 200, 'hey', done );
+
+        });
+
+        it( "should pass to another route if we specify", function ( done ) {
+
+            router.get( '/', function ( req, res, next ) {
+                res.write('hey');
+                next( 'route' );
+            });
+
+            router.get( '/', function ( req, res, next ) {
+                res.write("honney");
+                next();
+            });
+
+            app.use(function ( req, res ) {
+                res.end();
+            })
+
+            request( app )
+                .get( '/' )
+                .expect( 200, 'heyhonney', done );
 
         });
     });
