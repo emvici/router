@@ -128,9 +128,10 @@ describe( "support connect", function () {
 				
             });
 
-            it( "should redirect if a non-empty step was hited", function () {
-                
-            });
+            it( "shouldn't save route on session")
+
+
+            it( "should redirect if a non-empty step was hited" );
 
             it( "should access first step" );
 

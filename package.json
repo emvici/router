@@ -27,6 +27,29 @@
     "middleware"
   ],
   "author": "José Moreira <jose.moreira@findhit.com>",
+  "contributors": [
+    {
+      "name": "José Moreira",
+      "email": [
+        "jose.moreira@findhit.com",
+        "jmoreira@microdual.com"
+      ]
+    },
+    {
+      "name": "António Loureiro",
+      "email": [
+        "ajbloureiro@findhit.com",
+        "ajb.loureiro@gmail.com"
+      ]
+    }
+    {
+      "name": "Bruno Casanova",
+      "email": [
+        "bruno@findhit.com",
+        "deftonicks_me@hotmail.com"
+      ]
+    }
+  ],
   "license": "GPL v3",
   "bugs": {
     "url": "https://github.com/emvici/emvici-router/issues"
