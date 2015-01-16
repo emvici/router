@@ -1,5 +1,6 @@
 var connect = require( 'connect' ),
-    Router = require( '../../../lib/router' );
+    Router = require( '../../../lib/router' ),
+    session = require( 'express-session' );
 
 module.exports = function ( options ) {
     var _ = {};
@@ -7,11 +8,8 @@ module.exports = function ( options ) {
     _.app = connect();
     _.router = new Router( options );
 
-    // Simulate a session middleware
-    _.app.use(function ( req, res, next ) {
-        req.session = {};
-        next();
-    });
+    // Use session
+    _.app.use( session({ secret: 'test', resave: false, saveUninitialized: true }) );
 
     // Use router
     _.app.use( _.router );
