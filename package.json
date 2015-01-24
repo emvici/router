@@ -1,6 +1,6 @@
 {
   "name": "emvici-router",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "High Performance express/connect pluggable router middleware",
   "main": "index.js",
   "scripts": {
@@ -59,7 +59,7 @@
     "bluebird": "^2.5.2",
     "debug": "^2.1.1",
     "findhit-util": "^0.2.3",
-    "stack-queue": "0.0.3"
+    "stack-queue": "0.0.5"
   },
   "devDependencies": {
     "chai": "^1.10.0",
