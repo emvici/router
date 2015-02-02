@@ -5,6 +5,7 @@
 - Share generated route as context for stacks
 
 ## Upcoming
+- Added a short-circuit feature for router.
 
 ## 0.0.7
 - Not defined variable fix
