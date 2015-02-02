@@ -30,13 +30,11 @@ describe( "support connect", function () {
             });
 
             it( "shouldn't save route on session",function(){
-//console.log('uelee',app);
-                var r = request(app);
-
-                r.get('/register',function(req,res){
+console.log('uelee',app);
+                var r = request(app).get('/register',function(req,res){
 console.log('eheree');
                 });
-//console.log(r);
+console.log(r);
             });
 
             it( "should redirect if a non-empty step was hited" );
