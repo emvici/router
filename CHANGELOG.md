@@ -4,8 +4,10 @@
     - Replacement of express-router by emvici-router on an express app
 - Share generated route as context for stacks
 
-## Upcoming
+## 0.0.8
 - Added a short-circuit feature for router.
+- Added `strictNavigation` option to replace `lockdown` feature on WizardRoutes.
+- Multiple fixes on wizard routes
 
 ## 0.0.7
 - Not defined variable fix
