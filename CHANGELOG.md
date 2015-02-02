@@ -6,6 +6,15 @@
 
 ## Upcoming
 
+## 0.0.7
+- Not defined variable fix
+
+## 0.0.6
+- Minor wizard fixes
+
+## 0.0.5
+- Minor wizard fixes
+
 ## 0.0.4
 - `next()` should always exit router on stack end, unless we specify 'route'.
     Example: `next( 'route' )`
