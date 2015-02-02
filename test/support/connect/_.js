@@ -10,7 +10,7 @@ module.exports = function ( options ) {
 
     // Use session
     _.app.use( session({ secret: 'test', resave: false, saveUninitialized: true }) );
-
+    
     // Use router
     _.app.use( _.router );
 
