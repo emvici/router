@@ -28,7 +28,7 @@ describe( "support connect", function () {
                 url: '/',
                 stack: function ( req, res, next ) {
                     res.statusCode = 200;
-                    res.write( req.path );
+                    res.write( req.path || req.url );
                     res.end();
 
                     next();
