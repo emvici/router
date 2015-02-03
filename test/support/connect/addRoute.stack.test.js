@@ -1,14 +1,15 @@
 var Util = require( 'findhit-util' ),
 
-Route = require( '../../../lib/route' ),
+    Route = require( '../../../lib/route' ),
 
-request = require( 'supertest' ),
-sinon = require( 'sinon' ),
-chai = require( 'chai' ),
-expect = chai.expect,
+    request = require( 'supertest-as-promised' ),
+    sinon = require( 'sinon' ),
+    chai = require( 'chai' ),
+    expect = chai.expect,
 
-helper = require( './_' );
+    helper = require( './_' );
 
+// -----------------------------------------------------------------------------
 
 describe( "support connect", function () {
     var app, router;
@@ -22,101 +23,100 @@ describe( "support connect", function () {
 
     describe( "router.addRoute", function () {
 
-        it( "options.stack as function", function ( done ) {
+        it( "options.stack as function", function () {
 
             router.addRoute({
                 url: '/',
                 stack: function ( req, res, next ) {
-                    res.statusCode = 200;
-                    res.write( req.path || req.url );
-                    res.end();
-
+                    res.response += 'hello';
                     next();
                 },
             });
 
-            request( app )
-                .get( '/' )
-                .expect( 200, '/', done );
+            return request( app )
+            .get( '/' )
+            .expect( 200, JSON.stringify({
+                url: '/',
+                response: 'hello'
+            }));
 
         });
 
-        it( "options.stack as an array of functions", function ( done ) {
+        it( "options.stack as an array of functions", function () {
 
             router.addRoute({
                 url: '/',
                 stack: [
-                function ( req, res, next ) {
-                    res.statusCode = 200;
+                    function ( req, res, next ) {
+                        res.statusCode = 200;
 
-                    next();
-                },
-                function ( req, res, next ) {
-                    res.write( '-' );
+                        next();
+                    },
+                    function ( req, res, next ) {
+                        res.response += '-';
 
-                    next();
-                },
-                function ( req, res, next ) {
-                    res.write( '.' );
+                        next();
+                    },
+                    function ( req, res, next ) {
+                        res.response += '.';
 
-                    next();
-                },
-                function ( req, res, next ) {
-                    res.write( '-' );
+                        next();
+                    },
+                    function ( req, res, next ) {
+                        res.response += '-';
 
-                    res.end();
-                },
+                        next();
+                    },
                 ]
             });
 
-            request( app )
-                .get( '/' )
-                .expect( 200, '-.-', done );
+            return  request( app )
+            .get( '/' )
+            .expect( 200, JSON.stringify({
+                url: '/',
+                response: '-.-'
+            }));
 
         });
 
-        it( "shouldn't pass to another route unless we specify", function ( done ) {
+        it( "shouldn't pass to another route unless we specify", function () {
 
             router.get( '/', function ( req, res, next ) {
-                res.write('hey');
+                res.response += "hey";
                 next();
             });
 
             router.get( '/', function ( req, res, next ) {
-                res.write("shouldn't run");
+                res.response += "shouldn't run";
                 next();
             });
 
-            app.use(function ( req, res ) {
-                res.end();
-            })
-
-            request( app )
-                .get( '/' )
-                .expect( 200, 'hey', done );
-
+            return request( app )
+            .get( '/' )
+            .expect( 200, JSON.stringify({
+                url: '/',
+                response: 'hey'
+            }));
         });
 
-        it( "should pass to another route if we specify", function ( done ) {
+        it( "should pass to another route if we specify", function () {
 
             router.get( '/', function ( req, res, next ) {
-                res.write('hey');
+                res.response += "hey";
                 next( 'route' );
             });
 
             router.get( '/', function ( req, res, next ) {
-                res.write("honney");
+                res.response += "wigglewiggle";
                 next();
             });
 
-            app.use(function ( req, res ) {
-                res.end();
-            })
-
-            request( app )
-                .get( '/' )
-                .expect( 200, 'heyhonney', done );
-
+            return request( app )
+            .get( '/' )
+            .expect( 200, JSON.stringify({
+                url: '/',
+                response: 'heywigglewiggle'
+            }));
         });
     });
 
