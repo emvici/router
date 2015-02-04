@@ -7,15 +7,12 @@ module.exports = function ( options ) {
     var _ = {};
 
     _.app = connect();
-    
-    _.app.use( session({ secret: 'test', resave: false, saveUninitialized: true }) );
-
     _.router = new Router( options );
 
     _.app.use( ReqResTify() );
 
     // Use session
-
+    _.app.use( session({ secret: 'test', resave: false, saveUninitialized: true }) );
 
     // Initiate res.response
     // So we can increment string
