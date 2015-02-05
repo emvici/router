@@ -18,7 +18,7 @@ describe( "support connect", function () {
 
     describe( "router.addRoute", function () {
 
-        /*describe( "type: wizard: strictNavigation:true", function () {
+        describe( "type: wizard: strictNavigation:true", function () {
 
             before(function () {
                 var _ = helper();
@@ -194,7 +194,7 @@ describe( "support connect", function () {
 
             });
 
-        });*/
+        });
 
         describe( "type: wizard: strictNavigation:function accessOddSteps", function () {
 
