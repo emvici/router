@@ -41,33 +41,42 @@ describe( "support connect", function () {
                 expect( route.steps ).to.have.length( 5 );
             });
 
-            it("should redirect to the first step /", function(){
-                return agent
-                    .get( '/auth/register' )
-                    .expect( 200, JSON.stringify({
-                        url: '/auth/register',
-                        response: 'tos'
-                    }));
+            it("should redirect to the first step /", function( done ){
+                session
+                    .get( '/auth/register/' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/' )
+                    .end( done );
+                    /*.end( function( err, res ){
+                        if ( err ) return done(err);
+    console.log('------------------------------------------------------',res.res);
+
+                        //done();
+                    } );*/
+
             });
 
-            it( "should be able to access tos step", function () {
-                return agent
+            it( "should be able to access tos step", function ( done ) {
+                session
                     .get( '/auth/register/tos' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/tos',
-                            response: 'tos'
-                        })
-                    );
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+                    /*function( err, res ){
+                        if ( err ) return done(err);
+    console.log('------------------------------------------------------',res);
+
+                        //done();
+                    } );*/
+
             });
 
-            it( "shouldn't be able to access who-are-you step", function () {
-                return agent
-                    .get( '/auth/register/who-are-you' )
-                    .expect(302)
-                    .then(function(res){
-                        expect(res.headers.location).to.be.equal('/auth/register/tos');
-                    });
+            it( "shouldn't be able to access who-are-you step", function ( done ) {
+                session
+                    .post( '/auth/register/who-are-you' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
 
             });
 
@@ -77,7 +86,7 @@ describe( "support connect", function () {
                     .post( '/auth/register/tos' )
                     .expect( 302 )
                     .expect( 'Location', '/auth/register/who-are-you' )
-                    .end(done);
+                    .end( done );
 
             });
 
@@ -91,7 +100,7 @@ describe( "support connect", function () {
                             response: 'who-are-you'
                         })
                     )
-                    .end(done);
+                    .end( done );
 
             });
 
@@ -101,8 +110,12 @@ describe( "support connect", function () {
                     .get( '/auth/register/tos' )
                     .expect( 302 )
                     .expect( 'Location', '/auth/register/who-are-you' )
-                    .end(done);
+                    .end( done );
 
+            });
+
+            after(function(){
+                session.destroy();
             });
 
         });
@@ -126,72 +139,53 @@ describe( "support connect", function () {
                 expect( route.steps ).to.have.length( 5 );
             });
 
-            it("should redirect to the first step /", function(){
-                return agent
-                    .get( '/auth/register' )
-                    .expect( 200, JSON.stringify({
-                        url: '/auth/register',
-                        response: 'tos'
-                    }));
+            it("should redirect to the first step /", function ( done ){
+                session
+                    .get( '/auth/register/' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/' )
+                    .end(done);
             });
 
-            it( "should be able to access /tos step", function () {
-                return agent
+            it( "should be able to access /tos step", function ( done ) {
+                session
                     .get( '/auth/register/tos' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/tos',
-                            response: 'tos'
-                        })
-                    );
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+
             });
 
-            it( "should be able to access /who-are-you step", function () {
-                return agent
+            it( "should be able to access /who-are-you step", function ( done ) {
+                session
                     .get( '/auth/register/who-are-you' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/who-are-you',
-                            response: 'who-are-you'
-                        })
-                    );
-
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/who-are-you' )
+                    .end( done );
             });
 
-            it( "should be able to access /i18n step", function () {
-                return agent
+            it( "should be able to access /i18n step", function ( done ) {
+                session
                     .get( '/auth/register/i18n' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/i18n',
-                            response: 'i18n'
-                        })
-                    );
-
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/i18n' )
+                    .end( done );
             });
 
-            it( "should be able to access /credentials step", function () {
-                return agent
+            it( "should be able to access /credentials step", function ( done ) {
+                session
                     .get( '/auth/register/credentials' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/credentials',
-                            response: 'credentials'
-                        })
-                    );
-
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/credentials' )
+                    .end( done );
             });
 
-            it( "should be able to access /congrats step", function () {
-                return agent
+            it( "should be able to access /congrats step", function ( done ) {
+                session
                     .get( '/auth/register/congrats' )
-                    .expect( 200,
-                        JSON.stringify({
-                            url: '/auth/register/congrats',
-                            response: 'congrats'
-                        })
-                    );
-
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/congrats' )
+                    .end( done );
             });
 
         });
@@ -201,7 +195,9 @@ describe( "support connect", function () {
             before(function () {
                 var _ = helper(),
                     accessOddSteps = function( requestedStep, currentStep, route ){
-                        console.log('navigate-----------------------------------------------------------------------------------------',currentStep.name,requestedStep.name);
+console.log(
+'navigate-----------------------------------------------------------------------------------------'
+,currentStep.name,requestedStep.name);
                         return false;
                     };
 
@@ -218,25 +214,19 @@ describe( "support connect", function () {
 
                 testRoutes.strictNavigation = accessOddSteps;
                 route = router.addRoute(testRoutes);
-
-
-console.log('------------------------------------------------------------------------------------------------------------------------');
             });
 
             it( "should have 5 steps", function () {
                 expect( route.steps ).to.have.length( 5 );
             });
 
-            /*it("should redirect to the first step /", function( done ){
+            it("should redirect to the first step /", function( done ){
                 session
                     .get( '/auth/register/' )
-                    .then(function(res){
-console.log('res',res);
-                    });
-                    /*.expect( 200 )
+                    .expect( 200 )
                     .expect( 'Location', '/auth/register/' )
-                    .end(done);* /
-            });*/
+                    .end(done);
+            });
 
             it("should be able to access first step /tos", function( done ){
                 session
@@ -246,13 +236,13 @@ console.log('res',res);
                     .end(done);
             });
 
-            /*it( "shouldn't be able to access the second step /who-are-you", function ( done ) {
+            it( "shouldn't be able to access the second step /who-are-you", function ( done ) {
                 session
                     .get( '/auth/register/who-are-you' )
                     .expect( 302 )
                     .expect( 'Location', '/auth/register/tos' )
                     .end(done);
-            });*/
+            });
 
             it( "should be able to access the third step /i18n", function ( done ) {
                 session
@@ -262,13 +252,13 @@ console.log('res',res);
                     .end(done);
             });
 
-            /* it( "shouldn't be able to access the fourth step /credentials", function ( done ) {
+            it( "shouldn't be able to access the fourth step /credentials", function ( done ) {
                 session
                     .get( '/auth/register/credentials' )
                     .expect( 302 )
                     .expect( 'Location', '/auth/register/tos' )
                     .end(done);
-            }); */
+            });
 
             it( "should be able to access the fifth step /congrats", function ( done ) {
                 session
