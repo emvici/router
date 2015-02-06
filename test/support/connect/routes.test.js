@@ -4,9 +4,9 @@ module.exports = {
     autoReset: true,
     steps: [
         {
-            type: 'step',
-            title: 'Terms and Conditions',
-            name: 'tos',
+            type    : "step",
+            title   : "Terms and Conditions",
+            name    : "tos",
 
             prepare: function ( req, res, next ) {
                 res.response += 'tos';
@@ -19,9 +19,9 @@ module.exports = {
             }
         },
         {
-            type: 'step',
-            title: "Who are you?",
-            name : "who-are-you",
+            type    : "step",
+            title   : "Who are you?",
+            name    : "who-are-you",
 
             prepare: function ( req, res, next ) {
                 res.response += 'who-are-you';

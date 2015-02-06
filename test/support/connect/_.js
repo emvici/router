@@ -1,7 +1,8 @@
 var connect = require( 'connect' ),
     Router = require( '../../../lib/router' ),
     ReqResTify = require( 'emvici-reqres-tify' ),
-    session = require( 'express-session' );
+    session = require( 'express-session' ),
+    debug = require( 'debug' )('emvici-router:route:type:_');
 
 module.exports = function ( options ) {
     var _ = {};
@@ -31,13 +32,16 @@ module.exports = function ( options ) {
             response: res.response || null,
         };
 
+        debug('render',200,payload);
         res.statusCode = 200;
         res.write( JSON.stringify( payload ) );
         res.end();
+        next();
     });
 
     // Error handler
     _.app.use(function error_handler ( err, req, res, next ) {
+        debug('error_handler',err.code || 500,err.toString() || 'Internal Error');
         res.statusCode = err.code || 500;
         res.write( err.toString() || 'Internal Error' );
         res.end();

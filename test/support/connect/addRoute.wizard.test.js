@@ -9,32 +9,40 @@ var Util = require( 'findhit-util' ),
     expect = chai.expect,
 
     helper = require( './_' ),
-    testRoutes = require( './routes.test.js' );
+    testRoutes = require( './routes.test.js' ),
+    debug = require( 'debug' )('emvici-router:route:type:wizard:tests');
 
 // -----------------------------------------------------------------------------
 
 describe( "support connect", function () {
-    var app, router, route, agent, session;
+    var app, router, route, agent, session, S;
 
     describe( "router.addRoute", function () {
+
+        before(function(){
+            var _ = helper();
+
+            app = _.app;
+            router = _.router;
+
+            agent = request(app);
+
+            S = Session({
+                app: _.app,
+                envs: { NODE_ENV: 'development' }
+            });
+        });
 
         describe( "type: wizard: strictNavigation:true", function () {
 
             before(function () {
-                var _ = helper();
-
-                app = _.app;
-                router = _.router;
-
-                agent = request(app);
-
-                var s = Session({
-                    app: _.app,
-                    envs: { NODE_ENV: 'development' }
-                });
-                session = new s();
+                session = new S();
 
                 route = router.addRoute(testRoutes);
+            });
+
+            after(function(){
+                session.destroy();
             });
 
             it( "should have 5 steps", function () {
@@ -44,30 +52,18 @@ describe( "support connect", function () {
             it("should redirect to the first step /", function( done ){
                 session
                     .get( '/auth/register/' )
-                    .expect( 200 )
-                    .expect( 'Location', '/auth/register/' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
                     .end( done );
-                    /*.end( function( err, res ){
-                        if ( err ) return done(err);
-    console.log('------------------------------------------------------',res.res);
-
-                        //done();
-                    } );*/
 
             });
 
-            it( "should be able to access tos step", function ( done ) {
+            it( "should be able to access /tos step", function ( done ) {
                 session
                     .get( '/auth/register/tos' )
                     .expect( 200 )
                     .expect( 'Location', '/auth/register/tos' )
                     .end( done );
-                    /*function( err, res ){
-                        if ( err ) return done(err);
-    console.log('------------------------------------------------------',res);
-
-                        //done();
-                    } );*/
 
             });
 
@@ -114,25 +110,20 @@ describe( "support connect", function () {
 
             });
 
-            after(function(){
-                session.destroy();
-            });
-
         });
-
 
         describe( "type: wizard: strictNavigation:false", function () {
 
             before(function () {
-                var _ = helper();
-
-                app = _.app;
-                router = _.router;
-
-                agent = request(app);
+                session = new S();
+                router.Routes = [];
 
                 testRoutes.strictNavigation = false;
                 route = router.addRoute(testRoutes);
+            });
+
+            after(function(){
+                session.destroy();
             });
 
             it( "should have 5 steps", function () {
@@ -142,9 +133,9 @@ describe( "support connect", function () {
             it("should redirect to the first step /", function ( done ){
                 session
                     .get( '/auth/register/' )
-                    .expect( 200 )
-                    .expect( 'Location', '/auth/register/' )
-                    .end(done);
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
             });
 
             it( "should be able to access /tos step", function ( done ) {
@@ -193,27 +184,19 @@ describe( "support connect", function () {
         describe( "type: wizard: strictNavigation:function accessOddSteps", function () {
 
             before(function () {
-                var _ = helper(),
-                    accessOddSteps = function( requestedStep, currentStep, route ){
-console.log(
-'navigate-----------------------------------------------------------------------------------------'
-,currentStep.name,requestedStep.name);
+                var accessOddSteps = function( requestedStep, currentStep, route ){
                         return false;
                     };
 
-                app = _.app;
-                router = _.router;
+                session = new S();
 
-                agent = request(app);
-
-                var s = Session({
-                    app: _.app,
-                    envs: { NODE_ENV: 'development' }
-                });
-                session = new s();
-
+                router.Routes = [];
                 testRoutes.strictNavigation = accessOddSteps;
                 route = router.addRoute(testRoutes);
+            });
+
+            after(function(){
+                session.destroy();
             });
 
             it( "should have 5 steps", function () {
