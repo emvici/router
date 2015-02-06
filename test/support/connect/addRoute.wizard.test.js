@@ -2,140 +2,254 @@ var Util = require( 'findhit-util' ),
 
     Route = require( '../../../lib/route' ),
 
-    request = require( 'supertest' ),
+    request = require( 'supertest-as-promised' ),
+    Session = require( 'supertest-session' ),
     sinon = require( 'sinon' ),
     chai = require( 'chai' ),
     expect = chai.expect,
 
-    helper = require( './_' );
+    helper = require( './_' ),
+    testRoutes = require( './routes.test.js' ),
+    debug = require( 'debug' )('emvici-router:route:type:wizard:tests');
 
 // -----------------------------------------------------------------------------
 
 describe( "support connect", function () {
-    var app, router;
+    var app, router, route, agent, session, S;
 
     describe( "router.addRoute", function () {
 
-        describe( "type: wizard", function () {
+        before(function(){
+            var _ = helper();
+
+            app = _.app;
+            router = _.router;
+
+            agent = request(app);
+
+            S = Session({
+                app: _.app,
+                envs: { NODE_ENV: 'development' }
+            });
+        });
+
+        describe( "type: wizard: strictNavigation:true", function () {
 
             before(function () {
-                var _ = helper();
+                session = new S();
 
-                app = _.app;
-                router = _.router;
-
-                router.addRoute({
-                    url: '/register',
-                    type: 'wizard',
-                    steps: {
-
-                        tos: {
-                            title: "Terms and Conditions",
-
-                            prepare: function ( req, res, next ) {
-                                return true;
-                            },
-
-                            process: function ( req, res, next ) {
-                                req.body.tos = { accept: 1 };
-
-                                return !! req.body.tos.accept;
-                            },
-
-                        },
-
-                        identity: {
-                            title: "Who are you?",
-
-                            prepare: function ( req, res, next ) {
-                                return true;
-                            },
-
-                            process: function ( req, res, next ) {
-                                var p = req.body.process = {
-                                        first_name: 'Casa',
-                                        last_name: 'Nova',
-                                        gender: 'F',
-                                        birthday: '27/05/1986',
-                                    };
-
-                                return !! ( r.first_name && r.last_name && r.gender && r.birthday );
-                            },
-
-                        },
-
-                        internationalization: {
-                            title: "Internationalization",
-
-                            prepare: function ( req, res, next ) {
-                                var i = req.body.internationalization = {
-                                        language_id: {
-                                            43: 'Portuguese',
-                                            8: 'English',
-                                            12: 'Russian',
-                                        }
-                                    };
-
-                                req.data.language_id = i.language_id;
-                                return true;
-                            },
-
-                            process: function ( req, res, next ) {
-                                var i = req.body.internationalization = { language_id: 8 };
-
-                                return !! parseInt( i.language_id );
-                            },
-                        },
-
-                        credentials: {
-                            title: "Credentials",
-
-                            prepare: function () {
-                                return true;
-                            },
-
-                            process: function ( req, res, next ) {
-                                var c = req.body.credentials = {
-                                        password: 'youshallnotpass',
-                                        security_answer: 'what is your pet name?',
-                                        security_question: 'i like bacon!',
-                                    };
-
-                                return !! ( c.password && c.security_answer && c.security_question );
-                            },
-
-                        },
-
-                        congratulations: {
-                            title: "Congrats!!!",
-
-                            prepare: function () {
-                                req.data.identity = req.body.identity;
-                                req.data.cred = req.body.cred;
-
-                                return true;
-                            },
-
-                            process: function ( req, res, next ) {
-                                var c = req.body.congratulations = { finish: 1 };
-
-                                return !! c.finish;
-                            },
-                        },
-
-                    },
-                });
-				
+                route = router.addRoute(testRoutes);
             });
 
-            it( "shouldn't save route on session")
+            after(function(){
+                session.destroy();
+            });
 
+            it( "should have 5 steps", function () {
+                expect( route.steps ).to.have.length( 5 );
+            });
 
-            it( "should redirect if a non-empty step was hited" );
+            it("should redirect to the first step /", function( done ){
+                session
+                    .get( '/auth/register/' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
 
-            it( "should access first step" );
+            });
 
-            it( "should access second step if first one was hited!");
+            it( "should be able to access /tos step", function ( done ) {
+                session
+                    .get( '/auth/register/tos' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+
+            });
+
+            it( "shouldn't be able to access who-are-you step", function ( done ) {
+                session
+                    .post( '/auth/register/who-are-you' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+
+            });
+
+            it( "until you process tos step", function ( done ) {
+
+                session
+                    .post( '/auth/register/tos' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/who-are-you' )
+                    .end( done );
+
+            });
+
+            it( "and now it should be able to access who-are-you step", function ( done ) {
+
+                session
+                    .get( '/auth/register/who-are-you' )
+                    .expect( 200,
+                        JSON.stringify({
+                            url: '/auth/register/who-are-you',
+                            response: 'who-are-you'
+                        })
+                    )
+                    .end( done );
+
+            });
+
+            it( "but not letting you to go back", function ( done ) {
+
+                session
+                    .get( '/auth/register/tos' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/who-are-you' )
+                    .end( done );
+
+            });
+
+        });
+
+        describe( "type: wizard: strictNavigation:false", function () {
+
+            before(function () {
+                session = new S();
+                router.Routes = [];
+
+                testRoutes.strictNavigation = false;
+                route = router.addRoute(testRoutes);
+            });
+
+            after(function(){
+                session.destroy();
+            });
+
+            it( "should have 5 steps", function () {
+                expect( route.steps ).to.have.length( 5 );
+            });
+
+            it("should redirect to the first step /", function ( done ){
+                session
+                    .get( '/auth/register/' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+            });
+
+            it( "should be able to access /tos step", function ( done ) {
+                session
+                    .get( '/auth/register/tos' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end( done );
+
+            });
+
+            it( "should be able to access /who-are-you step", function ( done ) {
+                session
+                    .get( '/auth/register/who-are-you' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/who-are-you' )
+                    .end( done );
+            });
+
+            it( "should be able to access /i18n step", function ( done ) {
+                session
+                    .get( '/auth/register/i18n' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/i18n' )
+                    .end( done );
+            });
+
+            it( "should be able to access /credentials step", function ( done ) {
+                session
+                    .get( '/auth/register/credentials' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/credentials' )
+                    .end( done );
+            });
+
+            it( "should be able to access /congrats step", function ( done ) {
+                session
+                    .get( '/auth/register/congrats' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/congrats' )
+                    .end( done );
+            });
+
+        });
+
+        describe( "type: wizard: strictNavigation:function accessOddSteps", function () {
+
+            before(function () {
+                var accessOddSteps = function( requestedStep, currentStep, route ){
+                        return false;
+                    };
+
+                session = new S();
+
+                router.Routes = [];
+                testRoutes.strictNavigation = accessOddSteps;
+                route = router.addRoute(testRoutes);
+            });
+
+            after(function(){
+                session.destroy();
+            });
+
+            it( "should have 5 steps", function () {
+                expect( route.steps ).to.have.length( 5 );
+            });
+
+            it("should redirect to the first step /", function( done ){
+                session
+                    .get( '/auth/register/' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/' )
+                    .end(done);
+            });
+
+            it("should be able to access first step /tos", function( done ){
+                session
+                    .get( '/auth/register/tos' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end(done);
+            });
+
+            it( "shouldn't be able to access the second step /who-are-you", function ( done ) {
+                session
+                    .get( '/auth/register/who-are-you' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end(done);
+            });
+
+            it( "should be able to access the third step /i18n", function ( done ) {
+                session
+                    .get( '/auth/register/i18n' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/i18n' )
+                    .end(done);
+            });
+
+            it( "shouldn't be able to access the fourth step /credentials", function ( done ) {
+                session
+                    .get( '/auth/register/credentials' )
+                    .expect( 302 )
+                    .expect( 'Location', '/auth/register/tos' )
+                    .end(done);
+            });
+
+            it( "should be able to access the fifth step /congrats", function ( done ) {
+                session
+                    .get( '/auth/register/congrats' )
+                    .expect( 200 )
+                    .expect( 'Location', '/auth/register/congrats' )
+                    .end(done);
+            });
 
         });
 

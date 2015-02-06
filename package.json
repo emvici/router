@@ -64,10 +64,13 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "connect": "^3.3.3",
+    "emvici-reqres-tify": "0.0.3",
     "express": "^4.10.6",
     "express-session": "^1.10.1",
     "mocha": "^2.0.1",
     "sinon": "^1.12.2",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "supertest-as-promised": "^1.0.0",
+    "supertest-session": "0.0.7"
   }
 }
