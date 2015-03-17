@@ -1,6 +1,6 @@
 {
   "name": "emvici-router",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "High Performance express/connect pluggable router middleware",
   "main": "index.js",
   "scripts": {

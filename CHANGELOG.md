@@ -5,6 +5,8 @@
 - Share generated route as context for stacks
 
 ## Upcoming
+
+## 0.0.10
 - Implementation of prerequisites feature for route filtering
 - Added methods on #WizardRoute.prototype for allowing step's data store
 - Updated dependencies
