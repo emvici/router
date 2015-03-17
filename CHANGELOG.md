@@ -5,6 +5,8 @@
 - Share generated route as context for stacks
 
 ## Upcoming
+
+## 0.0.11
 - #30 Wizard.Store.processedSteps is now saving `step.id` instead of `step.name`
 
 ## 0.0.10
