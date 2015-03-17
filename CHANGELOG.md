@@ -4,6 +4,9 @@
     - Replacement of express-router by emvici-router on an express app
 - Share generated route as context for stacks
 
+## Upcoming
+- Implementation of prerequisites feature for route filtering
+
 ## 0.0.9
 - Router's route dispatching approach refactored
 
