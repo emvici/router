@@ -11,8 +11,22 @@ module.exports = function ( options ) {
     // Use session
     _.app.use( session({ secret: 'test', resave: false, saveUninitialized: true }) );
 
+    // Add a response appender
+    _.app.use( function ( req, res, next ) {
+        res.append = '';
+
+        next();
+    });
+
     // Use router
     _.app.use( _.router );
+
+    // In case we didn't ended, we want to end with appended result
+    _.app.use( function ( req, res, next ) {
+        if( ! res.finished ) {
+            res.end( res.append );
+        }
+    });
 
     // Error handler
     _.app.use(function ( err, req, res, next ) {
