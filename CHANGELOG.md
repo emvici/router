@@ -6,6 +6,7 @@
 
 ## Upcoming
 - Implementation of prerequisites feature for route filtering
+- Added methods on #WizardRoute.prototype for allowing step's data store
 
 ## 0.0.9
 - Router's route dispatching approach refactored
