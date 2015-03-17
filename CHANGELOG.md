@@ -5,6 +5,7 @@
 - Share generated route as context for stacks
 
 ## Upcoming
+- #30 Wizard.Store.processedSteps is now saving `step.id` instead of `step.name`
 
 ## 0.0.10
 - Implementation of prerequisites feature for route filtering
