@@ -27,9 +27,11 @@ describe( "support connect", function () {
                 router.addRoute({
                     url: '/register',
                     type: 'wizard',
-                    steps: {
 
-                        tos: {
+                    steps: [
+
+                        {
+                            name: "tos",
                             title: "Terms and Conditions",
 
                             prepare: function ( req, res, next ) {
@@ -44,7 +46,8 @@ describe( "support connect", function () {
 
                         },
 
-                        identity: {
+                        {
+                            name: 'identity',
                             title: "Who are you?",
 
                             prepare: function ( req, res, next ) {
@@ -64,7 +67,8 @@ describe( "support connect", function () {
 
                         },
 
-                        internationalization: {
+                        {
+                            name: 'internationalization',
                             title: "Internationalization",
 
                             prepare: function ( req, res, next ) {
@@ -87,7 +91,8 @@ describe( "support connect", function () {
                             },
                         },
 
-                        credentials: {
+                        {
+                            name: 'credentials',
                             title: "Credentials",
 
                             prepare: function () {
@@ -106,7 +111,8 @@ describe( "support connect", function () {
 
                         },
 
-                        congratulations: {
+                        {
+                            name: 'congratulations',
                             title: "Congrats!!!",
 
                             prepare: function () {
@@ -123,9 +129,9 @@ describe( "support connect", function () {
                             },
                         },
 
-                    },
+                    ],
                 });
-				
+
             });
 
             it( "shouldn't save route on session")

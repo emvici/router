@@ -1,6 +1,7 @@
 var Util = require( 'findhit-util' ),
     Promise = require( 'bluebird' ),
 
+    Router = require( '../../../lib/router' ),
     Route = require( '../../../lib/route' ),
 
     sinon = require( 'sinon' ),
@@ -8,10 +9,12 @@ var Util = require( 'findhit-util' ),
     expect = chai.expect;
 
 describe( "WizardRoute", function () {
+    var router = new Router();
     var route;
 
     before(function () {
         route = Route.construct({
+            router: router,
             url: '/buy/breakfast',
             type: 'wizard',
             steps: [
